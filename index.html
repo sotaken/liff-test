@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在庫報告ボタン</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family:
+                sans-serif;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            background: #06C755;
+            color: white;
+            border:
+                none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="btn" id="sendBtn">555を報告する</button>
+
+    <script>
+        async function main() {
+            //1.LIFFの初期化(IDは後ほど取得)
+            await liff.init({ liffId: "YOUR_LIFF_ID" });
+            // 2.ボタンクリック時の処理
+            document.getElementById('sendBtn').addEventListener('click', async () => {
+                try {
+                    // LINEのトーク画面にメッセージ送信
+                    await liff.sendMessages([
+                        { type: 'text', text: '555' }
+                    ]);
+                    // 送信したら画面を閉じる
+                    liff.closeWindow();
+                } catch (error) {
+                    alert("エラーが発生しました:" + error);
+                }
+            });
+        }
+        main();
+    </script>
+</body>
+
+</html>
