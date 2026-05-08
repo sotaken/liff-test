@@ -2,65 +2,69 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>交換報告ツール</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f4f7f6; margin: 0; padding-top: 50px; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 350px; text-align: center; }
-        h3 { color: #333; margin-bottom: 20px; border-bottom: 2px solid #06C755; padding-bottom: 10px; }
-        .input-group { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
-        label { font-weight: bold; margin-bottom: 10px; color: #555; display: block; }
-        .stepper { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .btn-step { background-color: #e0e0e0; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-step:active { background-color: #ccc; transform: scale(0.9); }
-        input { width: 60px; text-align: center; font-size: 20px; border: 1px solid #ddd; border-radius: 8px; padding: 5px; -moz-appearance: textfield; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        .btn-submit { background-color: #06C755; color: white; border: none; padding: 15px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3); }
-        .btn-submit:active { transform: translateY(2px); box-shadow: none; }
+        /* ズーム禁止と連打対策 */
+        touch-action: manipulation;
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f4f7f6; margin: 0; padding-top: 30px; user-select: none; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 380px; text-align: center; }
+        .input-group { margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #eee; }
+        label { font-weight: bold; margin-bottom: 8px; color: #555; display: block; font-size: 18px; }
+        
+        /* ボタンのデザイン改善 */
+        .stepper { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-step { background-color: #e0e0e0; border: none; width: 50px; height: 50px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-plus-ten { background-color: #d1e7dd; color: #0f5132; }
+        .btn-step:active { background-color: #ccc; }
+        
+        input { width: 50px; text-align: center; font-size: 22px; border: none; font-weight: bold; background: transparent; }
+        
+        .btn-submit { background-color: #06C755; color: white; border: none; padding: 18px; border-radius: 30px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h3>今回の交換</h3>
+        <h2 style="margin-top:0;">交換入力</h2>
         
         <div class="input-group">
-            <label>千円</label>
+            <label>千円札</label>
             <div class="stepper">
-                <button class="btn-step" onclick="changeVal('sen', -1)">-</button>
+                <button class="btn-step" onclick="changeVal('sen', -1)">-1</button>
                 <input type="number" id="sen" value="0" readonly>
-                <button class="btn-step" onclick="changeVal('sen', 1)">+</button>
+                <button class="btn-step" onclick="changeVal('sen', 1)">+1</button>
+                <button class="btn-step btn-plus-ten" onclick="changeVal('sen', 10)">+10</button>
             </div>
         </div>
 
         <div class="input-group">
-            <label>五千円</label>
+            <label>五千円札</label>
             <div class="stepper">
-                <button class="btn-step" onclick="changeVal('gosen', -1)">-</button>
+                <button class="btn-step" onclick="changeVal('gosen', -1)">-1</button>
                 <input type="number" id="gosen" value="0" readonly>
-                <button class="btn-step" onclick="changeVal('gosen', 1)">+</button>
+                <button class="btn-step" onclick="changeVal('gosen', 1)">+1</button>
+                <button class="btn-step btn-plus-ten" onclick="changeVal('gosen', 10)">+10</button>
             </div>
         </div>
 
         <div class="input-group">
-            <label>一万円</label>
+            <label>一万円札</label>
             <div class="stepper">
-                <button class="btn-step" onclick="changeVal('ichiman', -1)">-</button>
+                <button class="btn-step" onclick="changeVal('ichiman', -1)">-1</button>
                 <input type="number" id="ichiman" value="0" readonly>
-                <button class="btn-step" onclick="changeVal('ichiman', 1)">+</button>
+                <button class="btn-step" onclick="changeVal('ichiman', 1)">+1</button>
+                <button class="btn-step btn-plus-ten" onclick="changeVal('ichiman', 10)">+10</button>
             </div>
         </div>
         
-        <button class="btn-submit" onclick="sendExchange()">報告を送信する</button>
+        <button class="btn-submit" onclick="sendExchange()">この内容で送信</button>
     </div>
 
     <script>
         async function main() {
-            // あなたのLIFF IDに書き換えてください
             await liff.init({ liffId: "2010007265-pkPajbfV" });
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            }
+            if (!liff.isLoggedIn()) { liff.login(); }
         }
         main();
 
@@ -77,14 +81,14 @@
             const v5 = document.getElementById('gosen').value;
             const v10 = document.getElementById('ichiman').value;
             
-            // GASが受け取れる形式「商品名(今回の交換) 千円 五千円 一万円」
-            const text = `今回の交換 ${v1} ${v5} ${v10}`;
+            // GASが受け取れるよう数字とスペースのみ送る
+            const text = `${v1} ${v5} ${v10}`;
 
             try {
                 await liff.sendMessages([{ type: 'text', text: text }]);
                 liff.closeWindow();
             } catch (err) {
-                alert('送信エラー: ' + err);
+                alert('エラー: ' + err);
             }
         }
     </script>
