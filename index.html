@@ -6,31 +6,34 @@
     <title>交換報告ツール</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        /* ズーム禁止と連打対策 */
         touch-action: manipulation;
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f4f7f6; margin: 0; padding-top: 30px; user-select: none; }
-        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 380px; text-align: center; }
-        .input-group { margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #eee; }
-        label { font-weight: bold; margin-bottom: 8px; color: #555; display: block; font-size: 18px; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f4f7f6; margin: 0; padding-top: 20px; user-select: none; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 92%; max-width: 400px; text-align: center; box-sizing: border-box; }
+        .input-group { margin-bottom: 15px; padding: 15px 10px; border-radius: 12px; background-color: #fafafa; border: 1px solid #eee; }
+        label { font-weight: bold; margin-bottom: 10px; color: #333; display: block; font-size: 18px; }
         
-        /* ボタンのデザイン改善 */
-        .stepper { display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-step { background-color: #e0e0e0; border: none; width: 50px; height: 50px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .btn-plus-ten { background-color: #d1e7dd; color: #0f5132; }
-        .btn-step:active { background-color: #ccc; }
+        .stepper { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-step { background-color: #ffffff; border: 1px solid #ddd; width: 48px; height: 48px; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-plus-ten { background-color: #d1e7dd; color: #0f5132; border-color: #badbcc; }
+        .btn-reset-small { background-color: #fff0f0; color: #dc3545; border-color: #f5c2c7; width: 40px; height: 48px; }
         
-        input { width: 50px; text-align: center; font-size: 22px; border: none; font-weight: bold; background: transparent; }
+        input { width: 45px; text-align: center; font-size: 22px; border: none; font-weight: bold; background: transparent; color: #000; }
         
-        .btn-submit { background-color: #06C755; color: white; border: none; padding: 18px; border-radius: 30px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
+        .footer-btns { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-submit { background-color: #06C755; color: white; border: none; padding: 18px; border-radius: 30px; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3); }
+        .btn-clear-all { background: none; border: none; color: #888; font-size: 14px; text-decoration: underline; cursor: pointer; padding: 10px; }
+        
+        .btn-step:active { transform: scale(0.95); background-color: #f0f0f0; }
     </style>
 </head>
 <body>
     <div class="card">
-        <h2 style="margin-top:0;">交換入力</h2>
+        <h2 style="margin: 0 0 20px 0; font-size: 22px;">交換入力</h2>
         
         <div class="input-group">
             <label>千円札</label>
             <div class="stepper">
+                <button class="btn-step btn-reset-small" onclick="resetVal('sen')">✕</button>
                 <button class="btn-step" onclick="changeVal('sen', -1)">-1</button>
                 <input type="number" id="sen" value="0" readonly>
                 <button class="btn-step" onclick="changeVal('sen', 1)">+1</button>
@@ -41,6 +44,7 @@
         <div class="input-group">
             <label>五千円札</label>
             <div class="stepper">
+                <button class="btn-step btn-reset-small" onclick="resetVal('gosen')">✕</button>
                 <button class="btn-step" onclick="changeVal('gosen', -1)">-1</button>
                 <input type="number" id="gosen" value="0" readonly>
                 <button class="btn-step" onclick="changeVal('gosen', 1)">+1</button>
@@ -51,6 +55,7 @@
         <div class="input-group">
             <label>一万円札</label>
             <div class="stepper">
+                <button class="btn-step btn-reset-small" onclick="resetVal('ichiman')">✕</button>
                 <button class="btn-step" onclick="changeVal('ichiman', -1)">-1</button>
                 <input type="number" id="ichiman" value="0" readonly>
                 <button class="btn-step" onclick="changeVal('ichiman', 1)">+1</button>
@@ -58,7 +63,10 @@
             </div>
         </div>
         
-        <button class="btn-submit" onclick="sendExchange()">この内容で送信</button>
+        <div class="footer-btns">
+            <button class="btn-submit" onclick="sendExchange()">この内容で送信</button>
+            <button class="btn-clear-all" onclick="clearAll()">すべて 0 にリセット</button>
+        </div>
     </div>
 
     <script>
@@ -71,8 +79,18 @@
         function changeVal(id, amount) {
             const input = document.getElementById(id);
             let val = parseInt(input.value);
-            if (val + amount >= 0) {
-                input.value = val + amount;
+            if (val + amount >= 0) { input.value = val + amount; }
+        }
+
+        function resetVal(id) {
+            document.getElementById(id).value = 0;
+        }
+
+        function clearAll() {
+            if(confirm("すべての入力をリセットしますか？")) {
+                document.getElementById('sen').value = 0;
+                document.getElementById('gosen').value = 0;
+                document.getElementById('ichiman').value = 0;
             }
         }
 
@@ -80,8 +98,6 @@
             const v1 = document.getElementById('sen').value;
             const v5 = document.getElementById('gosen').value;
             const v10 = document.getElementById('ichiman').value;
-            
-            // GASが受け取れるよう数字とスペースのみ送る
             const text = `${v1} ${v5} ${v10}`;
 
             try {
