@@ -101,6 +101,16 @@
 
             const text = `${v1} ${v5} ${v10}`;
 
+            const ok = confirm(
+        `この内容を送信しますか？
+        
+        千円札: ${v1}
+        五千円札: ${v5}
+        一万円札: ${v10}`
+        );
+        
+        if (!ok) return;
+
             try {
                 if (!liff.isApiAvailable('shareTargetPicker')) {
                     alert('shareTargetPickerが利用できません');
