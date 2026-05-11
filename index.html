@@ -98,11 +98,24 @@
             const v1 = document.getElementById('sen').value;
             const v5 = document.getElementById('gosen').value;
             const v10 = document.getElementById('ichiman').value;
+
             const text = `${v1} ${v5} ${v10}`;
 
             try {
-                await liff.shareTargetPicker([{ type: 'text', text: text }]);
+                if (!liff.isApiAbvailable('shareTargetPicker')) {
+                    alert('shareTargetPickerが利用できません');
+                    return;
+                }
+
+                await liff.shareTargetPicker([
+                    {
+                        type: 'text',
+                        text: text
+                    }
+                ]);
+
                 liff.closeWindow();
+
             } catch (err) {
                 alert('エラー: ' + err);
             }
