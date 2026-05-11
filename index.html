@@ -101,7 +101,7 @@
             const text = `${v1} ${v5} ${v10}`;
 
             try {
-                await liff.sendMessages([{ type: 'text', text: text }]);
+                await liff.shareTargetPicker([{ type: 'text', text: text }]);
                 liff.closeWindow();
             } catch (err) {
                 alert('エラー: ' + err);
