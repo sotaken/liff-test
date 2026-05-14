@@ -130,17 +130,9 @@
     
         try {
     
-            const response = await fetch(GAS_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    s: v1,
-                    g: v5,
-                    m: v10
-                })
-            });
+            const response = await fetch(
+                `${GAS_URL}?s=${v1}&g=${v5}&m=${v10}`
+            );
     
             if (response.ok) {
     
@@ -148,7 +140,7 @@
     
                 document.getElementById('sen').value = 0;
                 document.getElementById('gosen').value = 0;
-                document.getElementById('ichiman').value = 0;
+                document.getElementById('ichiman').value = 0;   
     
                 liff.closeWindow();
     
