@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>管理ページ</title>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+
+      .stock {
+        font-size: 20px;
+        line-height: 1.8;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      label {
+        width: 90px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 80px;
+        font-size: 20px;
+        padding: 8px;
+        text-align: center;
+      }
+
+      button {
+        width: 100%;
+        border: none;
+        border-radius: 14px;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .btn-set {
+        background: #06c755;
+        color: white;
+        margin-top: 10px;
+      }
+
+      .btn-undo {
+        background: #ff9800;
+        color: white;
+      }
+
+      .btn-refresh {
+        background: #2196f3;
+        color: white;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h2>現在在庫</h2>
+
+      <div class="stock">
+        千円札: <span id="stockS">-</span><br />
+        五千円札: <span id="stockG">-</span><br />
+        一万円札: <span id="stockM">-</span>
+      </div>
+
+      <button class="btn-refresh" onclick="loadStock()">在庫更新</button>
+    </div>
+
+    <div class="card">
+      <h2>初期値セット</h2>
+
+      <div class="row">
+        <label>千円札</label>
+        <input type="number" id="setS" value="100" />
+      </div>
+
+      <div class="row">
+        <label>五千円札</label>
+        <input type="number" id="setG" value="100" />
+      </div>
+
+      <div class="row">
+        <label>一万円札</label>
+        <input type="number" id="setM" value="100" />
+      </div>
+
+      <button class="btn-set" onclick="setInitial()">
+        セットして履歴クリア
+      </button>
+    </div>
+
+    <div class="card">
+      <h2>取り消し</h2>
+
+      <button class="btn-undo" onclick="undoLast()">
+        直前の交換を取り消す
+      </button>
+    </div>
+
+    <script>
+      const GAS_URL =
+        "https://script.google.com/macros/s/AKfycbwJs-REqoycbAk5LulP_B2IYrrqa0gHeBH4dr4mwfKO1dfrg7EqP_WdrhfGL0zsZ1j2/exec";
+
+      async function main() {
+        await liff.init({
+          liffId: "管理用LIFF ID",
+        });
+
+        loadStock();
+      }
+
+      main();
+
+      async function loadStock() {
+        try {
+          const res = await fetch(`${GAS_URL}?action=stock`);
+
+          const data = await res.json();
+
+          document.getElementById("stockS").textContent = data.s;
+          document.getElementById("stockG").textContent = data.g;
+          document.getElementById("stockM").textContent = data.m;
+        } catch (err) {
+          alert("在庫取得失敗");
+        }
+      }
+
+      async function setInitial() {
+        const s = document.getElementById("setS").value;
+        const g = document.getElementById("setG").value;
+        const m = document.getElementById("setM").value;
+
+        const ok = confirm(
+          `初期値をセットしますか？
+
+千円札:${s}
+五千円札:${g}
+一万円札:${m}
+
+履歴は削除されます`,
+        );
+
+        if (!ok) return;
+
+        try {
+          await fetch(`${GAS_URL}?action=set&s=${s}&g=${g}&m=${m}`);
+
+          alert("セット完了");
+
+          loadStock();
+        } catch (err) {
+          alert("エラー");
+        }
+      }
+
+      async function undoLast() {
+        const ok = confirm("直前の交換を取り消しますか？");
+
+        if (!ok) return;
+
+        try {
+          await fetch(`${GAS_URL}?action=undo`);
+
+          alert("取り消しました");
+
+          loadStock();
+        } catch (err) {
+          alert("エラー");
+        }
+      }
+    </script>
+  </body>
+</html>
