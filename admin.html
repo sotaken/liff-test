@@ -131,16 +131,6 @@
       const GAS_URL =
         "https://script.google.com/macros/s/AKfycbwJs-REqoycbAk5LulP_B2IYrrqa0gHeBH4dr4mwfKO1dfrg7EqP_WdrhfGL0zsZ1j2/exec";
 
-      async function main() {
-        await liff.init({
-          liffId: "管理用LIFF ID",
-        });
-
-        loadStock();
-      }
-
-      main();
-
       async function loadStock() {
         try {
           const res = await fetch(`${GAS_URL}?action=stock`);
