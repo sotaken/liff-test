@@ -28,12 +28,8 @@
         margin-top: 0;
       }
 
-      .stock {
-        font-size: 20px;
-        line-height: 1.8;
-      }
-
-      .row {
+     
+  .row {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -75,26 +71,12 @@
         color: white;
       }
 
-      .btn-refresh {
-        background: #2196f3;
-        color: white;
-        margin-top: 10px;
-      }
+     
     </style>
   </head>
 
   <body>
-    <div class="card">
-      <h2>現在在庫</h2>
-
-      <div class="stock">
-        千円札: <span id="stockS">-</span><br />
-        五千円札: <span id="stockG">-</span><br />
-        一万円札: <span id="stockM">-</span>
-      </div>
-
-      <button class="btn-refresh" onclick="loadStock()">在庫更新</button>
-    </div>
+    
 
     <div class="card">
       <h2>初期値セット</h2>
@@ -131,19 +113,7 @@
       const GAS_URL =
         "https://script.google.com/macros/s/AKfycbwJs-REqoycbAk5LulP_B2IYrrqa0gHeBH4dr4mwfKO1dfrg7EqP_WdrhfGL0zsZ1j2/exec";
 
-      async function loadStock() {
-        try {
-          const res = await fetch(`${GAS_URL}?action=stock`);
-
-          const data = await res.json();
-
-          document.getElementById("stockS").textContent = data.s;
-          document.getElementById("stockG").textContent = data.g;
-          document.getElementById("stockM").textContent = data.m;
-        } catch (err) {
-          alert("在庫取得失敗");
-        }
-      }
+      
 
       async function setInitial() {
         const s = document.getElementById("setS").value;
