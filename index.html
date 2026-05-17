@@ -124,6 +124,15 @@
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
       }
+      .bnt-undo {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 14px;
+        text-decoration: underline;
+        corsor: pointer;
+        padding: 10px;
+      }
       .btn-clear-all {
         background: none;
         border: none;
@@ -226,6 +235,9 @@
         <button class="btn-submit" onclick="sendExchange()">
           この内容で送信
         </button>
+        <button class="bnt-undo" onclick="undoLast()">
+          直前の交換を取り消す
+        </button>
         <button class="btn-clear-all" onclick="clearAll()">
           すべて 0 にリセット
         </button>
@@ -281,6 +293,20 @@
         document.getElementById(id).value = 0;
 
         updateAfterStock();
+      }
+
+      async function undoLast() {
+        const ok = confirm("直前の交換を取り消しますか？");
+
+        if (!ok) return;
+
+        try {
+          await fetch(`${GAS_URL}?action=undo`);
+
+          alert("取り消しました");
+        } catch (err) {
+          alert("エラー");
+        }
       }
 
       function clearAll() {

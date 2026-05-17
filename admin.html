@@ -64,11 +64,6 @@
         color: white;
         margin-top: 10px;
       }
-
-      .btn-undo {
-        background: #ff9800;
-        color: white;
-      }
     </style>
   </head>
 
@@ -93,14 +88,6 @@
 
       <button class="btn-set" onclick="setInitial()">
         セットして履歴クリア
-      </button>
-    </div>
-
-    <div class="card">
-      <h2>取り消し</h2>
-
-      <button class="btn-undo" onclick="undoLast()">
-        直前の交換を取り消す
       </button>
     </div>
 
@@ -129,20 +116,6 @@
           await fetch(`${GAS_URL}?action=set&s=${s}&g=${g}&m=${m}`);
 
           alert("セット完了");
-        } catch (err) {
-          alert("エラー");
-        }
-      }
-
-      async function undoLast() {
-        const ok = confirm("直前の交換を取り消しますか？");
-
-        if (!ok) return;
-
-        try {
-          await fetch(`${GAS_URL}?action=undo`);
-
-          alert("取り消しました");
         } catch (err) {
           alert("エラー");
         }
