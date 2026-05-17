@@ -311,11 +311,21 @@
           const response = await fetch(`${GAS_URL}?s=${v1}&g=${v5}&m=${v10}`);
 
           if (response.ok) {
+            currentStock.sen -= Number(v1);
+            currentStock.gosen -= Number(v5);
+            currentStock.ichiman -= Number(v10);
+
+            document.getElementById("stock-sen").textContent = currentStock.sen;
+
+            document.getElementById("stock-gosen").textContent =
+              currentStock.gosen;
+
+            document.getElementById("stock-ichiman").textContent =
+              currentStock.ichiman;
+
             document.getElementById("sen").value = 0;
             document.getElementById("gosen").value = 0;
             document.getElementById("ichiman").value = 0;
-
-            await loadStock();
 
             alert("更新完了");
           } else {
