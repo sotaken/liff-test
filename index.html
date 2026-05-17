@@ -300,9 +300,9 @@
         const ok = confirm(
           `この内容を送信しますか？
     
-    千円札: ${v1}
-    五千円札: ${v5}
-    一万円札: ${v10}`,
+            千円札: ${v1}
+            五千円札: ${v5}
+            一万円札: ${v10}`,
         );
 
         if (!ok) return;
@@ -311,11 +311,13 @@
           const response = await fetch(`${GAS_URL}?s=${v1}&g=${v5}&m=${v10}`);
 
           if (response.ok) {
-            alert("更新完了");
-
             document.getElementById("sen").value = 0;
             document.getElementById("gosen").value = 0;
             document.getElementById("ichiman").value = 0;
+
+            await loadStock();
+
+            alert("更新完了");
           } else {
             alert("送信失敗");
           }
