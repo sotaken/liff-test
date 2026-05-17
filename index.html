@@ -339,13 +339,13 @@
         const ichiman = parseInt(document.getElementById("ichiman").value);
 
         document.getElementById("after-sen").textContent =
-          currentStock.sen + sen;
+          currentStock.sen - sen;
 
         document.getElementById("after-gosen").textContent =
-          currentStock.gosen + gosen;
+          currentStock.gosen - gosen;
 
         document.getElementById("after-ichiman").textContent =
-          currentStock.ichiman + ichiman;
+          currentStock.ichiman - ichiman;
       }
     </script>
   </body>
