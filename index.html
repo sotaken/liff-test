@@ -45,6 +45,13 @@
         font-size: 18px;
       }
 
+      .stock-info {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 12px;
+        line-height: 1.6;
+      }
+
       .stepper {
         display: flex;
         align-items: center;
@@ -140,57 +147,31 @@
 
       <div class="input-group">
         <label>千円札</label>
-        <div class="stepper">
-          <button class="btn-step btn-reset-small" onclick="resetVal('sen')">
-            ✕
-          </button>
-          <button class="btn-step" onclick="changeVal('sen', -1)">-1</button>
-          <input type="number" id="sen" value="0" readonly />
-          <button class="btn-step" onclick="changeVal('sen', 1)">+1</button>
-          <button class="btn-step btn-plus-ten" onclick="changeVal('sen', 10)">
-            +10
-          </button>
+        <label>千円札</label>
+
+        <div class="stock-info">
+          現在: <span id="stock-sen">-</span> 枚<br />
+          送信後: <span id="after-sen">-</span> 枚
         </div>
       </div>
 
       <div class="input-group">
         <label>五千円札</label>
-        <div class="stepper">
-          <button class="btn-step btn-reset-small" onclick="resetVal('gosen')">
-            ✕
-          </button>
-          <button class="btn-step" onclick="changeVal('gosen', -1)">-1</button>
-          <input type="number" id="gosen" value="0" readonly />
-          <button class="btn-step" onclick="changeVal('gosen', 1)">+1</button>
-          <button
-            class="btn-step btn-plus-ten"
-            onclick="changeVal('gosen', 10)"
-          >
-            +10
-          </button>
+        <label>五千円札</label>
+
+        <div class="stock-info">
+          現在: <span id="stock-gosen">-</span> 枚<br />
+          送信後: <span id="after-gosen">-</span> 枚
         </div>
       </div>
 
       <div class="input-group">
         <label>一万円札</label>
-        <div class="stepper">
-          <button
-            class="btn-step btn-reset-small"
-            onclick="resetVal('ichiman')"
-          >
-            ✕
-          </button>
-          <button class="btn-step" onclick="changeVal('ichiman', -1)">
-            -1
-          </button>
-          <input type="number" id="ichiman" value="0" readonly />
-          <button class="btn-step" onclick="changeVal('ichiman', 1)">+1</button>
-          <button
-            class="btn-step btn-plus-ten"
-            onclick="changeVal('ichiman', 10)"
-          >
-            +10
-          </button>
+        <label>一万円札</label>
+
+        <div class="stock-info">
+          現在: <span id="stock-ichiman">-</span> 枚<br />
+          送信後: <span id="after-ichiman">-</span> 枚
         </div>
       </div>
 
@@ -208,17 +189,34 @@
       const GAS_URL =
         "https://script.google.com/macros/s/AKfycbwJs-REqoycbAk5LulP_B2IYrrqa0gHeBH4dr4mwfKO1dfrg7EqP_WdrhfGL0zsZ1j2/exec";
 
-      async function main() {
-        await liff.init({
-          liffId: "2010020493-tJCIr0jK",
-        });
+      let currentStock = {
+        sen: 0,
+        gosen: 0,
+        ichiman: 0,
+      };
 
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        }
+      async function main() {
+        loadStock();
       }
 
       main();
+
+      async function loadStock() {
+        try {
+          const response = await fetch(`${GAS_URL}?mode=getStock`);
+          const data = await response.json();
+
+          currentStock = data;
+
+          document.getElementById("stock-sen").textContent = data.sen;
+          document.getElementById("stock-gosen").textContent = data.gosen;
+          document.getElementById("stock-ichiman").textContent = data.ichiman;
+
+          updateAfterStock();
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
       function changeVal(id, amount) {
         const input = document.getElementById(id);
@@ -228,10 +226,14 @@
         if (val + amount >= 0) {
           input.value = val + amount;
         }
+
+        updateAfterStock();
       }
 
       function resetVal(id) {
         document.getElementById(id).value = 0;
+
+        updateAfterStock();
       }
 
       function clearAll() {
@@ -240,6 +242,7 @@
           document.getElementById("gosen").value = 0;
           document.getElementById("ichiman").value = 0;
         }
+        updateAfterStock();
       }
 
       async function sendExchange() {
@@ -266,14 +269,27 @@
             document.getElementById("sen").value = 0;
             document.getElementById("gosen").value = 0;
             document.getElementById("ichiman").value = 0;
-
-            liff.closeWindow();
           } else {
             alert("送信失敗");
           }
         } catch (err) {
           alert("エラー: " + err);
         }
+      }
+
+      function updateAfterStock() {
+        const sen = parseInt(document.getElementById("sen").value);
+        const gosen = parseInt(document.getElementById("gosen").value);
+        const ichiman = parseInt(document.getElementById("ichiman").value);
+
+        document.getElementById("after-sen").textContent =
+          currentStock.sen + sen;
+
+        document.getElementById("after-gosen").textContent =
+          currentStock.gosen + gosen;
+
+        document.getElementById("after-ichiman").textContent =
+          currentStock.ichiman + ichiman;
       }
     </script>
   </body>
