@@ -147,31 +147,87 @@
 
       <div class="input-group">
         <label>千円札</label>
-        <label>千円札</label>
 
         <div class="stock-info">
           現在: <span id="stock-sen">-</span> 枚<br />
           送信後: <span id="after-sen">-</span> 枚
         </div>
+
+        <div class="stepper">
+          <button class="btn-step btn-reset-small" onclick="resetVal('sen')">
+            ✕
+          </button>
+
+          <button class="btn-step" onclick="changeVal('sen', -1)">-1</button>
+
+          <input type="number" id="sen" value="0" readonly />
+
+          <button class="btn-step" onclick="changeVal('sen', 1)">+1</button>
+
+          <button class="btn-step btn-plus-ten" onclick="changeVal('sen', 10)">
+            +10
+          </button>
+        </div>
       </div>
 
       <div class="input-group">
-        <label>五千円札</label>
         <label>五千円札</label>
 
         <div class="stock-info">
           現在: <span id="stock-gosen">-</span> 枚<br />
           送信後: <span id="after-gosen">-</span> 枚
         </div>
+
+        <div class="stepper">
+          <button class="btn-step btn-reset-small" onclick="resetVal('gosen')">
+            ✕
+          </button>
+
+          <button class="btn-step" onclick="changeVal('gosen', -1)">-1</button>
+
+          <input type="number" id="gosen" value="0" readonly />
+
+          <button class="btn-step" onclick="changeVal('gosen', 1)">+1</button>
+
+          <button
+            class="btn-step btn-plus-ten"
+            onclick="changeVal('gosen', 10)"
+          >
+            +10
+          </button>
+        </div>
       </div>
 
       <div class="input-group">
-        <label>一万円札</label>
         <label>一万円札</label>
 
         <div class="stock-info">
           現在: <span id="stock-ichiman">-</span> 枚<br />
           送信後: <span id="after-ichiman">-</span> 枚
+        </div>
+
+        <div class="stepper">
+          <button
+            class="btn-step btn-reset-small"
+            onclick="resetVal('ichiman')"
+          >
+            ✕
+          </button>
+
+          <button class="btn-step" onclick="changeVal('ichiman', -1)">
+            -1
+          </button>
+
+          <input type="number" id="ichiman" value="0" readonly />
+
+          <button class="btn-step" onclick="changeVal('ichiman', 1)">+1</button>
+
+          <button
+            class="btn-step btn-plus-ten"
+            onclick="changeVal('ichiman', 10)"
+          >
+            +10
+          </button>
         </div>
       </div>
 
