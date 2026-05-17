@@ -28,8 +28,7 @@
         margin-top: 0;
       }
 
-     
-  .row {
+      .row {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -70,14 +69,10 @@
         background: #ff9800;
         color: white;
       }
-
-     
     </style>
   </head>
 
   <body>
-    
-
     <div class="card">
       <h2>初期値セット</h2>
 
@@ -113,8 +108,6 @@
       const GAS_URL =
         "https://script.google.com/macros/s/AKfycbwJs-REqoycbAk5LulP_B2IYrrqa0gHeBH4dr4mwfKO1dfrg7EqP_WdrhfGL0zsZ1j2/exec";
 
-      
-
       async function setInitial() {
         const s = document.getElementById("setS").value;
         const g = document.getElementById("setG").value;
@@ -123,11 +116,11 @@
         const ok = confirm(
           `初期値をセットしますか？
 
-千円札:${s}
-五千円札:${g}
-一万円札:${m}
+          千円札:${s}
+          五千円札:${g}
+          一万円札:${m}
 
-履歴は削除されます`,
+          履歴は削除されます`,
         );
 
         if (!ok) return;
@@ -136,8 +129,6 @@
           await fetch(`${GAS_URL}?action=set&s=${s}&g=${g}&m=${m}`);
 
           alert("セット完了");
-
-          loadStock();
         } catch (err) {
           alert("エラー");
         }
@@ -152,8 +143,6 @@
           await fetch(`${GAS_URL}?action=undo`);
 
           alert("取り消しました");
-
-          loadStock();
         } catch (err) {
           alert("エラー");
         }
