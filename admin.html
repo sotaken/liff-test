@@ -120,6 +120,56 @@
           alert("エラー");
         }
       }
+
+      async function loadHistory() {
+        try {
+          const response = await fetch(`${GAS_URL}?action=history`);
+
+          const data = await response.json();
+
+          const historyList = document.getElementById("historyList");
+
+          // 履歴なし
+          if (data.length === 0) {
+            historyList.innerHTML = "履歴がありません";
+
+            return;
+          }
+
+          // HTML生成
+          historyList.innerHTML = data
+            .map((row) => {
+              return `
+        <div style="
+          padding:12px;
+          border-bottom:1px solid #eee;
+          line-height:1.7;
+        ">
+          <div>
+            ${row[0]}
+          </div>
+
+          <div>
+            千円:${row[1]}
+            五千円:${row[2]}
+            一万円:${row[3]}
+          </div>
+        </div>
+      `;
+            })
+            .join("");
+        } catch (err) {
+          document.getElementById("historyList").innerHTML = "取得失敗";
+        }
+      }
+
+      // ページ起動時
+      loadHistory();
     </script>
+    <div class="card">
+      <h2>最新履歴</h2>
+
+      <div id="historyList">読み込み中...</div>
+    </div>
   </body>
 </html>
