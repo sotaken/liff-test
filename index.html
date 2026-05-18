@@ -235,9 +235,9 @@
         <button class="btn-submit" onclick="sendExchange()">
           この内容で送信
         </button>
-        <button class="bnt-undo" onclick="undoLast()">
+        <!-- <button class="bnt-undo" onclick="undoLast()">
           直前の交換を取り消す
-        </button>
+        </button> -->
         <button class="btn-clear-all" onclick="clearAll()">
           すべて 0 にリセット
         </button>
@@ -367,35 +367,35 @@
       // -------------------------
       // undo
       // -------------------------
-      async function undoLast() {
-        if (!lastExchange) return;
+      // async function undoLast() {
+      //   if (!lastExchange) return;
 
-        const ok = confirm("直前の交換を取り消しますか？");
-        if (!ok) return;
+      //   const ok = confirm("直前の交換を取り消しますか？");
+      //   if (!ok) return;
 
-        try {
-          loading = true;
+      //   try {
+      //     loading = true;
 
-          currentStock.sen += lastExchange.s;
-          currentStock.gosen += lastExchange.g;
-          currentStock.ichiman += lastExchange.m;
+      //     currentStock.sen += lastExchange.s;
+      //     currentStock.gosen += lastExchange.g;
+      //     currentStock.ichiman += lastExchange.m;
 
-          document.getElementById("stock-sen").textContent = currentStock.sen;
-          document.getElementById("stock-gosen").textContent =
-            currentStock.gosen;
-          document.getElementById("stock-ichiman").textContent =
-            currentStock.ichiman;
+      //     document.getElementById("stock-sen").textContent = currentStock.sen;
+      //     document.getElementById("stock-gosen").textContent =
+      //       currentStock.gosen;
+      //     document.getElementById("stock-ichiman").textContent =
+      //       currentStock.ichiman;
 
-          await fetch(`${GAS_URL}?action=undo`, { cache: "no-store" });
+      //     await fetch(`${GAS_URL}?action=undo`, { cache: "no-store" });
 
-          alert("取り消しました");
-        } catch (err) {
-          console.error(err);
-          alert("エラー");
-        } finally {
-          loading = false;
-        }
-      }
+      //     alert("取り消しました");
+      //   } catch (err) {
+      //     console.error(err);
+      //     alert("エラー");
+      //   } finally {
+      //     loading = false;
+      //   }
+      // }
 
       // -------------------------
       // 閉じる時エラー防止
