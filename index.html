@@ -267,44 +267,22 @@
       // 在庫取得（安定版）
       // -------------------------
       async function loadStock() {
-        if (loading) return;
-        loading = true;
+        const response = await fetch(`${GAS_URL}?action=stock`);
 
-        try {
-          // ローディング表示（チラつき防止）
-          document.getElementById("stock-sen").textContent = "…";
-          document.getElementById("stock-gosen").textContent = "…";
-          document.getElementById("stock-ichiman").textContent = "…";
+        const data = await response.json();
 
-          const response = await fetch(`${GAS_URL}?action=stock`, {
-            cache: "no-store",
-          });
+        currentStock = {
+          sen: data.sen,
+          gosen: data.gosen,
+          ichiman: data.ichiman,
+        };
 
-          const data = await response.json();
+        document.getElementById("stock-sen").textContent = currentStock.sen;
 
-          if (!data) return;
+        document.getElementById("stock-gosen").textContent = currentStock.gosen;
 
-          currentStock = {
-            sen: data.sen ?? 0,
-            gosen: data.gosen ?? 0,
-            ichiman: data.ichiman ?? 0,
-          };
-
-          document.getElementById("stock-sen").textContent = currentStock.sen;
-          document.getElementById("stock-gosen").textContent =
-            currentStock.gosen;
-          document.getElementById("stock-ichiman").textContent =
-            currentStock.ichiman;
-        } catch (err) {
-          console.error("loadStock error:", err);
-
-          // フォールバック表示
-          document.getElementById("stock-sen").textContent = "-";
-          document.getElementById("stock-gosen").textContent = "-";
-          document.getElementById("stock-ichiman").textContent = "-";
-        } finally {
-          loading = false;
-        }
+        document.getElementById("stock-ichiman").textContent =
+          currentStock.ichiman;
       }
 
       // -------------------------
